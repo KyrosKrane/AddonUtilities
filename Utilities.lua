@@ -26,8 +26,8 @@ addon.Utilities.CHAT_BLUE = addon.Utilities.FONT_COLOR_CODE_START .. "0066ff"
 addon.Utilities.CHAT_RED = addon.Utilities.FONT_COLOR_CODE_START .. "a00000"
 
 
--- This function converts non-string values into strings for easy concatenation with other string values
-function addon.Utilities:MakeString(text)
+-- This function converts non-string values into readable strings for easy concatenation with other string values
+function addon.Utilities.MakeString(text)
 	-- shortcut for faster lookup
 	local texttype = type(text)
 
@@ -38,18 +38,20 @@ function addon.Utilities:MakeString(text)
 	elseif "boolean" == texttype then
 		output = text and "true" or "false"
 	elseif "nil" == texttype then
-		output = ""
+		output = "nil"
 	else
 		-- function, userdata, thread, and table are not handled.
-		-- Return the passed in value as-is and let the other guy deal with it...
-		return text
-    end
-end
+		-- Return the type as-is and let the other guy deal with it...
+		output = texttype
+	end
+	
+	return output
+end -- addon.Utilities.MakeString()
 
 -- Easymode text coloring
 -- I considered just using WrapTextInColorCode(msg, colorcode)
 -- but this way I have the flexibility to either include the leading |cff code or not
-function addon.Utilities:Color(text, color)
+function addon.Utilities.Color(text, color)
 
 	-- validate the color
 	if not "string" == type(color) then
@@ -58,22 +60,8 @@ function addon.Utilities:Color(text, color)
 		return text
 	end
 
-	-- shortcut for faster lookup
-	local texttype = type(text)
-
 	-- get a printable version of the text input
-	local output
-	if "string" == texttype or "number" == texttype then
-		output = text
-	elseif "boolean" == texttype then
-		output = text and "true" or "false"
-	elseif "nil" == texttype then
-		output = ""
-	else
-		-- function, userdata, thread, and table are not handled.
-		-- Return the passed in value as-is and let the other guy deal with it...
-		return text
-	end
+	local output = addon.Utilities.MakeString(text)
 
 	-- color as requested
 	if (6 == #color) then
@@ -86,13 +74,13 @@ function addon.Utilities:Color(text, color)
 		-- unknown format for color code. Assume the caller knows what he's doing and just roll with it
 		return color .. output .. FONT_COLOR_CODE_CLOSE
 	end
-end -- addon.Utilities:Color()
+end -- addon.Utilities.Color()
 
 
 -- Print regular output to the chat frame.
-function addon.Utilities:ChatPrint(msg)
-	DEFAULT_CHAT_FRAME:AddMessage(addon.Utilities:Color(addon.USER_ADDON_NAME .. ": ", addon.Utilities.CHAT_BLUE) .. msg)
-end -- addon.Utilities:ChatPrint
+function addon.Utilities.ChatPrint(msg)
+	DEFAULT_CHAT_FRAME:AddMessage(addon.Utilities.Color(addon.USER_ADDON_NAME .. ": ", addon.Utilities.CHAT_BLUE) .. msg)
+end -- addon.Utilities.ChatPrint()
 
 
 --#########################################
@@ -108,21 +96,21 @@ addon.DebugMode = true
 
 
 -- Print debug output to the chat frame.
-function addon.Utilities:DebugPrint(msg)
+function addon.Utilities.DebugPrint(msg)
 	if not addon.DebugMode then return end
 
-	DEFAULT_CHAT_FRAME:AddMessage(addon.Utilities:Color(addon.USER_ADDON_NAME .. " Debug: ", addon.Utilities.CHAT_RED) .. msg)
-end -- addon.Utilities:DebugPrint
+	DEFAULT_CHAT_FRAME:AddMessage(addon.Utilities.Color(addon.USER_ADDON_NAME .. " Debug: ", addon.Utilities.CHAT_RED) .. msg)
+end -- addon.Utilities.DebugPrint()
 
 
 -- Dumps a table into chat. Not intended for production use.
 local MAX_RECURSION_DEPTH = 10
-function addon.Utilities:DumpTable(TableToDump, indent)
+function addon.Utilities.DumpTable(TableToDump, indent)
 	if not addon.DebugMode then return end
 
 	if not indent then indent = 0 end
 	if indent > MAX_RECURSION_DEPTH then
-		addon.Utilities:DebugPrint("Recursion is at" .. (MAX_RECURSION_DEPTH + 1) .. " already; aborting.")
+		addon.Utilities.DebugPrint("Recursion is at" .. (MAX_RECURSION_DEPTH + 1) .. " already; aborting.")
 		return
 	end
 
@@ -135,30 +123,30 @@ function addon.Utilities:DumpTable(TableToDump, indent)
 		end
 		if "table" == type(v) then
 			s = s .. "Item " .. k .. " is sub-table."
-			addon.Utilities:DebugPrint(s)
+			addon.Utilities.DebugPrint(s)
 			indent = indent + 1
-			addon.Utilities:DumpTable(v, indent)
+			addon.Utilities.DumpTable(v, indent)
 			indent = indent - 1
 		else
 			s = s .. "Item " .. k .. " is " .. tostring(v)
-			addon.Utilities:DebugPrint(s)
+			addon.Utilities.DebugPrint(s)
 		end
 	end
-end -- addon.Utilities:DumpTable()
+end -- addon.Utilities.DumpTable()
 
 
 -- Debugging code to see what the hell is being passed in...
-function addon.Utilities:PrintVarArgs(...)
+function addon.Utilities.PrintVarArgs(...)
 	if not addon.DebugMode then return end
 
 	local n = select('#', ...)
-	addon.Utilities:DebugPrint("There are " .. n .. " items in varargs.")
+	addon.Utilities.DebugPrint("There are " .. n .. " items in varargs.")
 	local msg
 	for i = 1, n do
 		msg = select(i, ...)
-		addon.Utilities:DebugPrint("Item " .. i .. " is " .. msg)
+		addon.Utilities.DebugPrint("Item " .. i .. " is " .. msg)
 	end
-end -- addon.Utilities:PrintVarArgs()
+end -- addon.Utilities.PrintVarArgs()
 
 
 --#########################################
@@ -170,7 +158,7 @@ end -- addon.Utilities:PrintVarArgs()
 -- Returns true (inside) or false (outside)
 -- Adapted from the answer by John Bananas here: https://stackoverflow.com/questions/2049582/how-to-determine-if-a-point-is-in-a-2d-triangle
 -- s, a, b, and c must all be objects (tables) with two elements named x and y.
-function addon.Utilities:IsInsideTriangle(s, a, b, c)
+function addon.Utilities.IsInsideTriangle(s, a, b, c)
     local as_x = s.x-a.x
     local as_y = s.y-a.y
 
@@ -181,7 +169,7 @@ function addon.Utilities:IsInsideTriangle(s, a, b, c)
 	if (c.x-b.x)*(s.y-b.y)-(c.y-b.y)*(s.x-b.x) > 0 ~= s_ab then return false end
 
     return true
-end -- addon.Utilities:IsInsideTriangle()
+end -- addon.Utilities.IsInsideTriangle()
 
 --[===[
 -- Test case
@@ -202,9 +190,9 @@ if IsInsideTriangle(outside, Gorged, Caustic, Klepto) then print "outside report
 -- Splits a string into sections, based on a specified separator.
 -- Split text into a list consisting of the strings in text,
 -- separated by strings matching delimiter (which may be a pattern).
--- example: addon.Utilities:strsplit(",%s*", "Anna, Bob, Charlie,Dolores")
+-- example: addon.Utilities.strsplit(",%s*", "Anna, Bob, Charlie,Dolores")
 -- Adapted from Lua manual: http://lua-users.org/wiki/SplitJoin
-function addon.Utilities:strsplit(delimiter, text)
+function addon.Utilities.strsplit(delimiter, text)
 	local list = {}
 	local pos = 1
 	if strfind("", delimiter, 1) then
@@ -226,4 +214,4 @@ function addon.Utilities:strsplit(delimiter, text)
 		end
 	end
 	return list
-end -- addon.Utilities:strsplit()
+end -- addon.Utilities.strsplit()
