@@ -91,9 +91,9 @@ end -- addon.Utilities.ChatPrint()
 addon.DebugMode = false
 
 -- Addons have to add this code early on to enable debug mode for alpha builds
---[===[@alpha@
-APR.DebugMode = true
---@end-alpha@]===]
+--@end-alpha@
+addon.DebugMode = true
+--@end-alpha@
 
 
 -- Print debug output to the chat frame.
