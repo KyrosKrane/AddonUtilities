@@ -44,7 +44,7 @@ function addon.Utilities.MakeString(text)
 		-- Return the type as-is and let the other guy deal with it...
 		output = texttype
 	end
-	
+
 	return output
 end -- addon.Utilities.MakeString()
 
@@ -91,9 +91,13 @@ end -- addon.Utilities.ChatPrint()
 addon.DebugMode = false
 
 -- Addons have to add this code early on to enable debug mode for alpha builds
+--[======[
+
 --@end-alpha@
 addon.DebugMode = true
 --@end-alpha@
+
+--]======]
 
 
 -- Print debug output to the chat frame.
