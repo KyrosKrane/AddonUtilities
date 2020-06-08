@@ -90,6 +90,7 @@ end -- addon.Utilities.ChatPrint()
 -- Debug settings. True turns on debugging output, which users shouldn't normally need to see.
 addon.DebugMode = false
 
+-- Addons have to add this code early on to enable debug mode for alpha builds
 --[===[@alpha@
 APR.DebugMode = true
 --@end-alpha@]===]
