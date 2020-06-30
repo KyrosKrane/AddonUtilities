@@ -93,7 +93,7 @@ addon.DebugMode = false
 -- Addons have to add this code early on to enable debug mode for alpha builds
 --[======[
 
---@end-alpha@
+--@alpha@
 addon.DebugMode = true
 --@end-alpha@
 
