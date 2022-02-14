@@ -13,6 +13,7 @@ if not addon.Utilities then addon.Utilities = {} end
 
 -- set a default name for the addon. The main script should override this.
 addon.USER_ADDON_NAME = addonName
+addon.USER_ADDON_SHORT_NAME = addonName
 
 
 --#########################################
@@ -48,6 +49,7 @@ function addon.Utilities.MakeString(text)
 	return output
 end -- addon.Utilities.MakeString()
 
+
 -- Easymode text coloring
 -- I considered just using WrapTextInColorCode(msg, colorcode)
 -- but this way I have the flexibility to either include the leading |cff code or not
@@ -79,7 +81,7 @@ end -- addon.Utilities.Color()
 
 -- Print regular output to the chat frame.
 function addon.Utilities.ChatPrint(msg)
-	DEFAULT_CHAT_FRAME:AddMessage(addon.Utilities.Color(addon.USER_ADDON_NAME .. ": ", addon.Utilities.CHAT_BLUE) .. msg)
+	DEFAULT_CHAT_FRAME:AddMessage(addon.Utilities.Color(addon.USER_ADDON_SHORT_NAME .. ": ", addon.Utilities.CHAT_BLUE) .. msg)
 end -- addon.Utilities.ChatPrint()
 
 
@@ -104,7 +106,7 @@ addon.DebugMode = true
 function addon.Utilities.DebugPrint(msg)
 	if not addon.DebugMode then return end
 
-	DEFAULT_CHAT_FRAME:AddMessage(addon.Utilities.Color(addon.USER_ADDON_NAME .. " Debug: ", addon.Utilities.CHAT_RED) .. msg)
+	DEFAULT_CHAT_FRAME:AddMessage(addon.Utilities.Color(addon.USER_ADDON_SHORT_NAME .. " Debug: ", addon.Utilities.CHAT_RED) .. msg)
 end -- addon.Utilities.DebugPrint()
 
 
