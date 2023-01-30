@@ -112,33 +112,43 @@ end -- addon.Utilities.DebugPrint()
 
 -- Dumps a table into chat. Not intended for production use.
 local MAX_RECURSION_DEPTH = 10
-function addon.Utilities.DumpTable(TableToDump, indent)
+function addon.Utilities.DumpTable(TableToDump, indent, max_recursion)
 	if not addon.DebugMode then return end
 
 	if not indent then indent = 0 end
-	if indent > MAX_RECURSION_DEPTH then
-		addon.Utilities.DebugPrint("Recursion is at" .. (MAX_RECURSION_DEPTH + 1) .. " already; aborting.")
+	if not max_recursion then max_recursion = MAX_RECURSION_DEPTH end
+	
+	local spacer = ""
+	for i = 1, indent do -- this is auto skipped if indent is zero.
+		spacer = spacer .. "    "
+	end
+
+	if indent > max_recursion then
+		addon.Utilities.DebugPrint(spacer .. "Recursion is at " .. (max_recursion + 1) .. " already; aborting.")
 		return
 	end
 
 	for k, v in pairs(TableToDump) do
-		local s = ""
-		if indent > 0 then
-			for i = 1, indent do
-				s = s .. "    "
+
+		if "table" == type(k) then
+			addon.Utilities.DebugPrint(spacer .. "Next keytype is table.")
+			addon.Utilities.DumpTable(k, indent + 1, max_recursion)
+			if "table" == type(v) then
+				addon.Utilities.DebugPrint(spacer .. "Valtype is table.")
+				addon.Utilities.DumpTable(v, indent + 1, max_recursion)
+			else
+				addon.Utilities.DebugPrint(spacer .. "For this table key, valtype is " .. type(v) .. ", valtext " .. tostring(v))
 			end
-		end
-		if "table" == type(v) then
-			s = s .. "Item " .. k .. " is sub-table."
-			addon.Utilities.DebugPrint(s)
-			indent = indent + 1
-			addon.Utilities.DumpTable(v, indent)
-			indent = indent - 1
 		else
-			s = s .. "Item " .. k .. " is " .. tostring(v)
-			addon.Utilities.DebugPrint(s)
+		if "table" == type(v) then
+				addon.Utilities.DebugPrint(spacer .. "Keytext " .. tostring(k) .. ", keytype " .. type(k) .. ", valtype is table.")
+				addon.Utilities.DumpTable(v, indent + 1, max_recursion)
+		else
+				addon.Utilities.DebugPrint(spacer .. "Keytext " .. tostring(k) .. ", keytype " .. type(k) .. ", valtype is " .. type(v) .. ", valtext " .. tostring(v))
 		end
-	end
+
+		end -- if key is table
+	end -- for key/val pairs
 end -- addon.Utilities.DumpTable()
 
 
@@ -148,10 +158,15 @@ function addon.Utilities.PrintVarArgs(...)
 
 	local n = select('#', ...)
 	addon.Utilities.DebugPrint("There are " .. n .. " items in varargs.")
-	local msg
+	local element
 	for i = 1, n do
-		msg = select(i, ...)
-		addon.Utilities.DebugPrint("Item " .. i .. " is " .. msg)
+		element = select(i, ...)
+		if "table" == type(element) then
+			addon.Utilities.DebugPrint("Item " .. i .. " is table, dumping")
+			addon.Utilities.DumpTable(element)
+		else
+			addon.Utilities.DebugPrint("Item " .. i .. " is " .. tostring(element))
+		end
 	end
 end -- addon.Utilities.PrintVarArgs()
 
