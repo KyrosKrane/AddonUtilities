@@ -163,7 +163,7 @@ function addon.Utilities.PrintVarArgs(...)
 		element = select(i, ...)
 		if "table" == type(element) then
 			addon.Utilities.DebugPrint("Item " .. i .. " is table, dumping")
-			addon.Utilities.DumpTable(element)
+			addon.Utilities.DumpTable(element, 1)
 		else
 			addon.Utilities.DebugPrint("Item " .. i .. " is " .. tostring(element))
 		end
