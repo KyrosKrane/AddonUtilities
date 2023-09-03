@@ -103,10 +103,10 @@ addon.DebugMode = true
 
 
 -- Print debug output to the chat frame.
-function addon.Utilities.DebugPrint(msg)
+function addon.Utilities.DebugPrint(...)
 	if not addon.DebugMode then return end
 
-	DEFAULT_CHAT_FRAME:AddMessage(addon.Utilities.Color(addon.USER_ADDON_SHORT_NAME .. " Debug: ", addon.Utilities.CHAT_RED) .. msg)
+	print(addon.Utilities.Color(addon.USER_ADDON_SHORT_NAME .. " Debug: ", addon.Utilities.CHAT_RED), ...)
 end -- addon.Utilities.DebugPrint()
 
 
@@ -117,7 +117,7 @@ function addon.Utilities.DumpTable(TableToDump, indent, max_recursion)
 
 	if not indent then indent = 0 end
 	if not max_recursion then max_recursion = MAX_RECURSION_DEPTH end
-	
+
 	local spacer = ""
 	for i = 1, indent do -- this is auto skipped if indent is zero.
 		spacer = spacer .. "    "
