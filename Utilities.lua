@@ -81,7 +81,7 @@ end -- addon.Utilities.Color()
 
 -- Print regular output to the chat frame.
 function addon.Utilities.ChatPrint(msg)
-	DEFAULT_CHAT_FRAME:AddMessage(addon.Utilities.Color(addon.USER_ADDON_SHORT_NAME .. ": ", addon.Utilities.CHAT_BLUE) .. msg)
+	print(addon.Utilities.Color(addon.USER_ADDON_SHORT_NAME .. ":", addon.Utilities.CHAT_BLUE), msg)
 end -- addon.Utilities.ChatPrint()
 
 
@@ -106,7 +106,7 @@ addon.DebugMode = true
 function addon.Utilities.DebugPrint(...)
 	if not addon.DebugMode then return end
 
-	print(addon.Utilities.Color(addon.USER_ADDON_SHORT_NAME .. " Debug: ", addon.Utilities.CHAT_RED), ...)
+	print(addon.Utilities.Color(addon.USER_ADDON_SHORT_NAME .. " Debug:", addon.Utilities.CHAT_RED), ...)
 end -- addon.Utilities.DebugPrint()
 
 
@@ -181,16 +181,16 @@ end -- addon.Utilities.PrintVarArgs()
 -- Adapted from the answer by John Bananas here: https://stackoverflow.com/questions/2049582/how-to-determine-if-a-point-is-in-a-2d-triangle
 -- s, a, b, and c must all be objects (tables) with two elements named x and y.
 function addon.Utilities.IsInsideTriangle(s, a, b, c)
-    local as_x = s.x-a.x
-    local as_y = s.y-a.y
+	local as_x = s.x-a.x
+	local as_y = s.y-a.y
 
-    local s_ab = (b.x-a.x)*as_y-(b.y-a.y)*as_x > 0
+	local s_ab = (b.x-a.x)*as_y-(b.y-a.y)*as_x > 0
 
 	if (c.x-a.x)*as_y-(c.y-a.y)*as_x > 0 == s_ab then return false end
 
 	if (c.x-b.x)*(s.y-b.y)-(c.y-b.y)*(s.x-b.x) > 0 ~= s_ab then return false end
 
-    return true
+	return true
 end -- addon.Utilities.IsInsideTriangle()
 
 --[===[
