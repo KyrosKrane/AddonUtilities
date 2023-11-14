@@ -12,8 +12,8 @@ local addonName, addon = ...
 if not addon.Utilities then addon.Utilities = {} end
 
 -- set a default name for the addon. The main script should override this.
-addon.USER_ADDON_NAME = addonName
-addon.USER_ADDON_SHORT_NAME = addonName
+if not addon.USER_ADDON_NAME then addon.USER_ADDON_NAME = addonName end
+if not addon.USER_ADDON_SHORT_NAME then addon.USER_ADDON_SHORT_NAME = addonName end
 
 
 --#########################################
